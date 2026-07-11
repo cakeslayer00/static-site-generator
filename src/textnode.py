@@ -36,6 +36,6 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
         case TextType.ITALIC: return LeafNode("i", text_node.text)
         case TextType.CODE: return LeafNode("code", text_node.text)
         case TextType.LINK: return LeafNode("a", text_node.text, {"href": text_node.url if text_node.url else "" })
-        case TextType.IMAGE: return LeafNode("img", "", {"src": text_node.url if text_node.url else "", "alt": text_node.text}) 
-        case _ : raise Exception("Given text type is not supported") 
+        case TextType.IMAGE: return LeafNode("img", "", {"src": text_node.url if text_node.url else "", "alt": text_node.text})
+        case _ : raise Exception("Given text type is not supported")
 

@@ -1,5 +1,9 @@
 class HTMLNode:
-    def __init__(self, tag: str | None = None, value: str | None = None, children: list[HTMLNode] | None = None, props: dict[str, str] | None = None) -> None:
+    def __init__(self, 
+                 tag: str | None = None, 
+                 value: str | None = None, 
+                 children: list[HTMLNode] | None = None, 
+                 props: dict[str, str] | None = None) -> None:
         self.tag = tag
         self.value = value
         self.children = children
@@ -29,7 +33,7 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value, props=props)
 
     def to_html(self):
-        if not self.value:
+        if self.value is None:
             raise ValueError("Value is empty or None")
         if not self.tag:
             return self.value

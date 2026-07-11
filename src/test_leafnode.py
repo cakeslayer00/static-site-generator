@@ -14,6 +14,23 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode("", "Raw Value")
         self.assertEqual(node.to_html(), "Raw Value")
 
+    def test_leaf_to_html_none_tag_raw_value(self):
+        node = LeafNode(None, "Raw Value")
+        self.assertEqual(node.to_html(), "Raw Value")
+
+    def test_leaf_to_html_none_value_raises(self):
+        node = LeafNode("p", None)
+        self.assertRaises(ValueError, node.to_html)
+
+    def test_leaf_to_html_empty_value_renders(self):
+        # empty string is a valid value (e.g. <img>), it must not raise
+        node = LeafNode("img", "", {"src": "cat.png", "alt": "a cat"})
+        self.assertEqual(node.to_html(), '<img src="cat.png" alt="a cat"></img>')
+
+    def test_leaf_to_html_no_props(self):
+        node = LeafNode("span", "hi")
+        self.assertEqual(node.to_html(), "<span>hi</span>")
+
 
 if __name__ == "__main__":
     unittest.main()

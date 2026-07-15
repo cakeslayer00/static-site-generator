@@ -26,7 +26,7 @@ def copy_files_to_target_dir(source_dir: str, target_dir: str):
             copy_files_to_target_dir(source, target)
 
 def main() -> None:
-    basepath = "/" if not sys.argv[1] else sys.argv[1]
+    basepath = sys.argv[1] if len(sys.argv) > 1 else "/"
 
     copy_files_to_target_dir(STATIC_FILES_DIRECTORY, DOCS_DIRECTORY)
     generate_pages_recursive(basepath, CONTENT_FILES_DIRECTORY, "template.html", DOCS_DIRECTORY)

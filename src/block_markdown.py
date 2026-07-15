@@ -68,6 +68,13 @@ def block_to_children(block: str) -> list[HTMLNode]:
         block_nodes
     ))
 
+
+def extract_title(markdown: str) -> str:
+    if not markdown.startswith("# "):
+        raise Exception("Given markdown doesn't have h1 header")
+
+    return markdown.split("\n", 1)[0][2:].strip()
+
 def markdown_to_html_node(markdown: str) -> HTMLNode:
     blocks = markdown_to_blocks(markdown)
 

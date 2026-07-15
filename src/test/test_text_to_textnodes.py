@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-from split_inline import text_to_textnodes
+from inline_markdown import text_to_textnodes
 
 class TestTextToTextNodes(unittest.TestCase):
     def test_text_to_textnodes_with_every_inline_type(self):

@@ -1,22 +1,24 @@
 class HTMLNode:
-    def __init__(self, 
-                 tag: str | None = None, 
-                 value: str | None = None, 
-                 children: list[HTMLNode] | None = None, 
+    def __init__(self,
+                 tag: str | None = None,
+                 value: str | None = None,
+                 children: list[HTMLNode] | None = None,
                  props: dict[str, str] | None = None) -> None:
         self.tag = tag
         self.value = value
         self.children = children
-        self.props = props 
+        self.props = props
 
     def to_html(self):
-        raise NotImplementedError()
+        raise NotImplementedError("Can't convert parent node to html")
 
     def props_to_html(self):
         if not self.props or len(self.props) == 0:
             return ""
 
-        return " " + " ".join(map(lambda x: f'{x}="{self.props[x]}"', self.props.keys()))
+        return " " + " ".join(
+            map(lambda x: f'{x}="{self.props[x]}"', self.props.keys())
+        )
 
     def __repr__(self):
         return (
@@ -28,8 +30,9 @@ class HTMLNode:
         """
         )
 
+
 class LeafNode(HTMLNode):
-    def __init__(self, tag: str | None, value: str,  props: dict[str, str] | None = None) -> None:
+    def __init__(self, tag: str | None, value: str, props: dict[str, str] | None = None) -> None:
         super().__init__(tag, value, props=props)
 
     def to_html(self):
@@ -49,8 +52,9 @@ class LeafNode(HTMLNode):
         """
         )
 
+
 class ParentNode(HTMLNode):
-    def __init__(self, tag: str,  children: list[HTMLNode], props: dict[str, str] | None = None) -> None:
+    def __init__(self, tag: str, children: list[HTMLNode], props: dict[str, str] | None = None) -> None:
         super().__init__(tag, children=children, props=props)
 
     def to_html(self):
@@ -59,7 +63,8 @@ class ParentNode(HTMLNode):
         if not self.children:
             raise ValueError("Children is empty or None")
 
-        return f"<{self.tag}{self.props_to_html()}>" + "".join(map(lambda x: x.to_html(), self.children)) + f"</{self.tag}>"
+        return f"<{self.tag}{self.props_to_html()}>" + "".join(
+            map(lambda x: x.to_html(), self.children)) + f"</{self.tag}>"
 
     def __repr__(self):
         return (

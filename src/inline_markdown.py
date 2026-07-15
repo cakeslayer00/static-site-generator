@@ -1,5 +1,18 @@
+import re
+
 from textnode import TextNode, TextType
-from extract_markdown_block import extract_markdown_images, extract_markdown_links
+
+MARKDOWN_IMAGE_REGEX = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+MARKDOWN_LINK_REGEX = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+
+
+def extract_markdown_images(text: str) -> list[tuple[str, str]]:
+    return re.findall(MARKDOWN_IMAGE_REGEX, text)
+
+
+def extract_markdown_links(text: str) -> list[tuple[str, str]]:
+    return re.findall(MARKDOWN_LINK_REGEX, text)
+
 
 def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
     new_nodes: list[TextNode] = []
@@ -25,6 +38,7 @@ def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: 
 
     return new_nodes
 
+
 def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
     new_nodes: list[TextNode] = []
 
@@ -44,7 +58,7 @@ def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
 
         if text_to_split:
             new_nodes.append(TextNode(text_to_split, TextType.TEXT))
-    
+
     return new_nodes
 
 
@@ -62,23 +76,21 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
         for link in links:
             sections = text_to_split.split(f"[{link[0]}]({link[1]})", 1)
             new_nodes.append(TextNode(sections[0], TextType.TEXT))
-            new_nodes.append(TextNode(link[0], TextType.LINK , link[1]))
+            new_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
             text_to_split = sections[1]
 
         if text_to_split:
             new_nodes.append(TextNode(text_to_split, TextType.TEXT))
-    
+
     return new_nodes
+
 
 def text_to_textnodes(text: str) -> list[TextNode]:
     base = [TextNode(text, TextType.TEXT)]
-    # code first: a CODE node is skipped by later passes, so delimiters inside a
-    # code span stay literal
     code = split_nodes_delimiter(base, "`", TextType.CODE)
-    bold = split_nodes_delimiter(code, "*", TextType.BOLD)
+    strong = split_nodes_delimiter(code, "**", TextType.BOLD)
+    bold = split_nodes_delimiter(strong, "*", TextType.BOLD)
     italic = split_nodes_delimiter(bold, "_", TextType.ITALIC)
     image = split_nodes_image(italic)
     link = split_nodes_link(image)
     return link
-
-

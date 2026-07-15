@@ -1,5 +1,5 @@
 import unittest
-from extract_markdown_block import extract_markdown_images, extract_markdown_links
+from inline_markdown import extract_markdown_images, extract_markdown_links
 
 class TestImageOrLinkMarkdownExtraction(unittest.TestCase):
     def test_extract_markdown_images(self):
